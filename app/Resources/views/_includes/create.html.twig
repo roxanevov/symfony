@@ -1,1 +1,18 @@
-<h1>Créer</h1>
+{% extends "show/base.html.twig" %}
+{% block pageHeading %}
+    Create a show
+{% endblock %}
+
+{% block content %}
+    {# {{ form(showForm) }}#}
+    {{ form_start(showForm, {"attr":{"novalidate":"novalidate"}}) }}
+        {#{ form_widget(showForm) }}#}
+        {#{{ form_row(showForm.name) }}#}
+    {{ form_label(showForm.name) }}
+    {{ form_widget(showForm.name) }}
+    {{ form_errors(showForm.name) }}
+
+    {{ form_rest(showForm) }}
+        <input type="submit" value="create"/>
+    {{ form_end(showForm) }}
+{% endblock %}
