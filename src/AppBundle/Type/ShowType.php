@@ -2,11 +2,11 @@
 /**
  * Created by PhpStorm.
  * User: digital
- * Date: 05/02/2018
- * Time: 16:11
+ * Date: 06/02/2018
+ * Time: 08:55
  */
 
-namespace AppBundle\type;
+namespace AppBundle\Type;
 
 
 class ShowType
