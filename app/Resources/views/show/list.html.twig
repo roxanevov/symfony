@@ -1,4 +1,4 @@
-{% extends "show/base.html.twig" %}
+    {% extends "show/base.html.twig" %}
 {% block pageHeading %}
     Liste of shows
     {% endblock %}
@@ -11,6 +11,7 @@
             <h2 class="card-title">{{ show.name }}</h2>
             <p class="card-text">{{ show.abstract }}</p>
             <a href="#" class="btn btn-primary">Read More &rarr;</a>
+            <a href="{{ path('show_update', {"id": show.id}) }}" class="btn btn-primary float-right">Edite</a>g
         </div>
         <div class="card-footer text-muted">
             created on {{ show.releasedDate | date('d/m/y') }} by

@@ -1,6 +1,10 @@
 {% extends "show/base.html.twig" %}
 {% block pageHeading %}
-    Create a show
+    {%  if update is defined %}
+        Update show
+    {% else %}
+        Create a show
+    {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -13,6 +17,11 @@
     {{ form_errors(showForm.name) }}
 
     {{ form_rest(showForm) }}
+    {%  if update is defined %}
+        <input type="submit" value="update"/>
+    {% else %}
         <input type="submit" value="create"/>
+    {% endif %}
+
     {{ form_end(showForm) }}
 {% endblock %}
