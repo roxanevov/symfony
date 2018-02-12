@@ -1,15 +1,20 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: rox
- * Date: 12/02/2018
- * Time: 11:59
- */
 
 namespace AppBundle\ShowFinder;
 
 
-class ShowFinderInterface
+interface ShowFinderInterface
 {
+    /**
+     * Returns an array of shows according to querry passed.
+     * @param Strins $query the query typed by the user
+     * @return array $results the results got from the implementation of the ShowFinder
+     */
+    public function findByName($query);
 
+    /**
+     * Return the name of the implementation of the ShowFinder
+     * @return String $name
+     */
+    public function getName();
 }

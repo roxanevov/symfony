@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\File\FileUploader;
+use AppBundle\ShowFinder\ShowFinder;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -24,9 +25,20 @@ class ShowController extends Controller
     /**
      * @Route("/", name = "list")
      */
-    public function listAction(){
+    public function listAction(Request $request, ShowFinder $showFinder){
 
-        $shows = $this->getDoctrine()->getManager()->getRepository('AppBundle:Show')->findAll();
+        $session = $request->getSession();
+        if($session->has('query_search_shows')){
+            $shows = $showFinder->searchByName($session->get('query_search_shows'));
+            dump($shows);
+            die;
+            $request->getSession()->remove('query_search_shows');
+        }else{
+            $shows = $this->getDoctrine()->getManager()->getRepository('AppBundle:Show')->findAll();
+        }
+        //$showFinder->searchByName();
+        //dump($shows);
+        //  die;
 
         return $this->render('show/list.html.twig', ['shows' => $shows]);
     }
@@ -127,6 +139,15 @@ class ShowController extends Controller
             $this->addFlash('danger','The csrf token is not valid. The deletion was not completed');
         }
 
+        return $this->redirectToRoute('show_list');
+    }
+
+    /**
+     * @Route("/search", name="search")
+     * @Method({"POST"})
+     */
+    public function searchAction(Request $request){
+        $request->getSession()->set('query_search_shows', $request->request->get('query'));
         return $this->redirectToRoute('show_list');
     }
 
