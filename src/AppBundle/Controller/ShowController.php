@@ -103,7 +103,7 @@ class ShowController extends Controller
 
     /**
      * @Route("/delete", name="delete")
-     * @Method({"POST"})
+     * @Method({"DELETE"})
      */
     public function deleteAction(Request $request, CsrfTokenManagerInterface $csrfTokenManager){
 
