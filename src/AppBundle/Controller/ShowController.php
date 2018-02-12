@@ -4,12 +4,17 @@ namespace AppBundle\Controller;
 
 use AppBundle\File\FileUploader;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use AppBundle\Type\ShowType;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Entity\Show;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Csrf\CsrfTokenManager;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @Route(name = "show_")
@@ -32,7 +37,7 @@ class ShowController extends Controller
     public function createAction(Request $request, FileUploader $fileUploader){
 
         $show = new Show();
-        $form = $this->createForm(ShowType::class, $show);
+        $form = $this->createForm(ShowType::class, $show, ['validation_groups'=>'create']);
 
         $form->handleRequest($request);
 
@@ -94,6 +99,35 @@ class ShowController extends Controller
         }
         return $this->render('_includes/create.html.twig', ['showForm' => $showForm->createView(),'update'=>true]);
 
+    }
+
+    /**
+     * @Route("/delete", name="delete")
+     * @Method({"POST"})
+     */
+    public function deleteAction(Request $request, CsrfTokenManagerInterface $csrfTokenManager){
+
+        $doctrine = $this->getDoctrine();
+        $showId = $request->request->get('show_id');
+
+        $show = $doctrine->getRepository('AppBundle:Show')->findOneById($showId);
+
+        if(!$show){
+            throw new NotFoundHttpException(sprintf('There is no show with the id %d',$showId));
+        }
+
+        $csrfToken = new CsrfToken('delete_show',$request->request->get('_csrf_token'));
+
+        if($csrfTokenManager->isTokenValid($csrfToken)){
+            $doctrine->getManager()->remove($show);
+            $doctrine->getManager()->flush();
+
+            $this->addFlash('success','The show have been successfully deleted');
+        }else{
+            $this->addFlash('danger','The csrf token is not valid. The deletion was not completed');
+        }
+
+        return $this->redirectToRoute('show_list');
     }
 
 }
