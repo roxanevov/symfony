@@ -6,19 +6,26 @@
     <!-- Blog Post -->
     {% for show in shows %}
     <div class="card mb-4">
-        <img class="card-img-top" src="{{ asset('/upload/' ~ show.mainPicture) }}" alt="Card image cap">
+        {% if show.id is not null %}
+            <img class="card-img-top" src="{{ asset('/upload/' ~ show.mainPicture) }}" alt="Card image cap">
+        {% else %}
+            <img class="card-img-top" src="{{ show.mainPicture }}" alt="Card image cap">
+
+        {% endif %}
         <div class="card-body">
             <h2 class="card-title">{{ show.name }}</h2>
             <p class="card-text">{{ show.abstract }}</p>
             <a href="#" class="btn btn-primary">Read More &rarr;</a>
-            <a href="{{ path('show_update', {"id": show.id}) }}" class="btn btn-primary float-right">Edit</a>
+            {% if show.id is not null %}
+                <a href="{{ path('show_update', {"id": show.id}) }}" class="btn btn-primary float-right">Edit</a>
+                <form action="{{ path('show_delete') }}" method="POST">
+                    <input type="hidden" name="show_id" value="{{ show.id }}"/>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('delete_show') }}"/>
+                    <button type="submit" class="btn btn-danger">Delete x</button>
+                    <input type="hidden" name="_method" value="DELETE">
+                </form>
+            {% endif %}
 
-            <form action="{{ path('show_delete') }}" method="POST">
-                <input type="hidden" name="show_id" value="{{ show.id }}"/>
-                <input type="hidden" name="_csrf_token" value="{{ csrf_token('delete_show') }}"/>
-                <button type="submit" class="btn btn-danger">Delete x</button>
-                <input type="hidden" name="_method" value="DELETE">
-            </form>
         </div>
         <div class="card-footer text-muted">
             created on {{ show.releasedDate | date('d/m/y') }} by

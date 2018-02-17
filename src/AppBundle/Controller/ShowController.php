@@ -30,15 +30,11 @@ class ShowController extends Controller
         $session = $request->getSession();
         if($session->has('query_search_shows')){
             $shows = $showFinder->searchByName($session->get('query_search_shows'));
-            dump($shows);
-            die;
+
             $request->getSession()->remove('query_search_shows');
         }else{
             $shows = $this->getDoctrine()->getManager()->getRepository('AppBundle:Show')->findAll();
         }
-        //$showFinder->searchByName();
-        //dump($shows);
-        //  die;
 
         return $this->render('show/list.html.twig', ['shows' => $shows]);
     }

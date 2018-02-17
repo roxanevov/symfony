@@ -15,6 +15,7 @@ class DBShowFinder implements ShowFinderInterface
 
     public function findByName($query){
         $shows = $this->doctrine->getRepository('AppBundle:Show')->findAllByQuery($query);
+
         return $shows;
     }
 

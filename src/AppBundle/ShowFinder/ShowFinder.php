@@ -11,12 +11,11 @@ class ShowFinder
     public function searchByName($query){
         $tmp = [];
 
+
         foreach ($this->finders as $finder){
-            $tmp[$finder->getName()] = $finder->findByName($query);
+            $tmp = array_merge($tmp, $finder->findByName($query));
         }
-        dump($tmp);
-        die;
-        return $results;
+        return $tmp;
     }
 
     public function addFinder(ShowFinderInterface $finder){
