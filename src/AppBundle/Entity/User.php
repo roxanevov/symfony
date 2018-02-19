@@ -3,12 +3,17 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity
  * @ORM\Table
+ *
+ * @UniqueEntity("email")
  */
-class User
+class User implements UserInterface
 {
     /**
      * @ORM\Id
@@ -21,6 +26,19 @@ class User
      * @ORM\Column(type="string", length=255)
      */
     private $fullname;
+
+    private $roles;
+
+    /**
+     * @ORM\Column
+     */
+    private $password;
+
+    /**
+     * @ORM\Column
+     * @Assert\Email
+     */
+    private $email;
 
     /**
      * @return mixed
@@ -38,4 +56,34 @@ class User
         $this->fullname = $fullname;
     }
 
+    public function getRoles()
+    {
+        return ['ROLE_USER'];
+    }
+
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    public function setPassword($password){
+        $this->password = $password;
+    }
+
+    public function getSalt()
+    {
+
+    }
+
+    public function getUsername()
+    {
+        return $this->email;
+    }
+
+    public function setUsername($email){
+        $this->email = $email;
+    }
+    public function eraseCredentials()
+    {
+    }
 }
