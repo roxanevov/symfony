@@ -44,12 +44,14 @@ class Show
 
     /**
      * @ORM\Column(type="string")
+     *
      * @Assert\NotBlank (groups={"create", "update"})
      */
     private $country;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="shows")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      * @Assert\NotBlank (groups={"create", "update"})
      */
     private $author;
