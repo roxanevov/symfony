@@ -9,13 +9,12 @@ class ShowFinder
     private $finders;
 
     public function searchByName($query){
-        $tmp = [];
-
+        $resluts = [];
 
         foreach ($this->finders as $finder){
-            $tmp = array_merge($tmp, $finder->findByName($query));
+            $resluts = array_merge($resluts, $finder->findByName($query));
         }
-        return $tmp;
+        return $resluts;
     }
 
     public function addFinder(ShowFinderInterface $finder){

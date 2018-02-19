@@ -30,7 +30,7 @@ class ShowController extends Controller
         $session = $request->getSession();
         if($session->has('query_search_shows')){
             $shows = $showFinder->searchByName($session->get('query_search_shows'));
-
+            //dump($shows);die;
             $request->getSession()->remove('query_search_shows');
         }else{
             $shows = $this->getDoctrine()->getManager()->getRepository('AppBundle:Show')->findAll();
@@ -55,6 +55,7 @@ class ShowController extends Controller
             $generatedFileName = $fileUploader->upload($show->getTmpPicture(), $show->getCategory()->getName());
 
             $show->setMainPicture($generatedFileName);
+            $show->setDataSource(Show::DATA_SOURCE_DB);
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($show);

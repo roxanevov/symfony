@@ -2,6 +2,7 @@
 
 namespace AppBundle\ShowFinder;
 
+use AppBundle\Entity\Category;
 use AppBundle\Entity\Show;
 use GuzzleHttp\Client;
 use Symfony\Component\Validator\Constraints\DateTime;
@@ -18,10 +19,23 @@ class OMDBShowFinder implements ShowFinderInterface
     }
 
     public function findByName($query){
-        $shows = [];
-        $resultsApi = $this->client->get('/?apikey='.$this->apiKey.'&s='.$query);
 
-        $decodeResultsApi = \GuzzleHttp\json_decode($resultsApi->getBody(),true);
+
+        $resultsApi = $this->client->get('/?apikey='.$this->apiKey.'&t='.$query);
+        $json = \GuzzleHttp\json_decode($resultsApi->getBody(),true);
+
+        if ($json['Response']== 'False' && $json['Error'] == 'Movie not found!'){
+            return [];
+        }else {
+            return $this->convertToShow($json);
+        }
+
+
+
+        /*
+          $shows = [];
+          $resultsApi = $this->client->get('/?apikey='.$this->apiKey.'&s='.$query);
+          $decodeResultsApi = \GuzzleHttp\json_decode($resultsApi->getBody(),true);
 
         foreach ($decodeResultsApi["Search"] as $result){
 
@@ -43,6 +57,30 @@ class OMDBShowFinder implements ShowFinderInterface
 
         }
 
+        return $shows;*/
+    }
+
+    /**
+     * Create a private fnction that transform a OMDB JSON into a show and category
+     * @param String $json
+     * Shows[] $show
+     */
+    private function convertToShow($json){
+        $category =new Category();
+        $category ->setName($json['Genre']);
+
+        $shows = [];
+        $show = new Show();
+            $show
+                ->setName($json['Title'])
+                ->setDataSource(Show::DATA_SOURCE_OMBD)
+                ->setAbstract($json['Plot'])
+                ->setCountry($json['Country'])
+                ->setAuthor($json['Director'])
+                ->setReleasedDate(new \DateTime($json['Released']))
+                ->setMainPicture($json['Poster'])
+                ->setCategory($category);
+        $shows [] = $show;
         return $shows;
     }
 
