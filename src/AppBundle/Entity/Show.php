@@ -31,6 +31,7 @@ class Show
      * @ORM\Column(type="integer")
      *
      * @JMS\Expose
+     * @JMS\Groups({"show"})
      */
     private $id;
 
@@ -39,6 +40,7 @@ class Show
      * @Assert\NotBlank(message="Please entrer a name", groups={"create"})
      *
      * @JMS\Expose
+     * @JMS\Groups({"show"})
      */
     private $name;
 
@@ -47,6 +49,7 @@ class Show
      * @Assert\NotBlank (groups={"create","update"})
      *
      * @JMS\Expose
+     * @JMS\Groups({"show"})
      */
     private $abstract;
 
@@ -55,6 +58,7 @@ class Show
      *
      * @Assert\NotBlank (groups={"create", "update"})
      * @JMS\Expose
+     * @JMS\Groups({"show"})
      */
     private $country;
 
@@ -63,6 +67,7 @@ class Show
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      *
      * @JMS\Expose
+     * @JMS\Groups({"show"})
      */
     private $author;
 
@@ -71,12 +76,14 @@ class Show
      * @Assert\NotBlank (groups={"create", "update"})
      *
      * @JMS\Expose
+     * @JMS\Groups({"show"})
      */
     private $releasedDate;
 
     /**
      * @ORM\Column(type="string")
      * @Assert\Image(minHeight=300, minWidth=750, groups={"create"})
+     * @JMS\Groups({"show"})
      */
     private $mainPicture;
 
@@ -86,6 +93,7 @@ class Show
      * @Assert\NotBlank (groups={"create", "update"})
      *
      * @JMS\Expose
+     * @JMS\Groups({"show"})
      */
     private $category;
 
@@ -95,6 +103,7 @@ class Show
      * @ORM\Column(options = {"default"="In local database"})
      *
      * @JMS\Expose
+     * @JMS\Groups({"show"})
      */
     private $dataSource;
 

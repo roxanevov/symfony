@@ -3,6 +3,7 @@ namespace AppBundle\Controller\Api;
 
 
 use AppBundle\Entity\Show;
+use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -21,7 +22,10 @@ class ShowController extends Controller
     public function listeAction(SerializerInterface $serializer){
 
         $shows = $this->getDoctrine()->getRepository('AppBundle:Show')->findAll();
-        $data = $serializer->serialize($shows,'json');
+
+        $serializationContext = SerializationContext::create();
+
+        $data = $serializer->serialize($shows,'json',$serializationContext->setGroups(['show']));
         return $this->returnResponse($data, Response::HTTP_OK);
     }
 
@@ -31,7 +35,9 @@ class ShowController extends Controller
      */
     public function getShowAction(Show $show, SerializerInterface $serializer){
 
-        return $this->returnResponse($serializer->serialize($show,'json'), Response::HTTP_OK);
+        $serializationContext = SerializationContext::create();
+
+        return $this->returnResponse($serializer->serialize($show,'json',$serializationContext->setGroups(['show'])), Response::HTTP_OK);
 
     }
 
