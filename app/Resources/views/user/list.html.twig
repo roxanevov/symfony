@@ -12,6 +12,7 @@ Liste of users
         <th scope="col">Fullname</th>
         <th scope="col">Emain</th>
         <th scope="col">Roles</th>
+        <th scope="col">shows</th>
     </tr>
     </thead>
     <tbody>
@@ -21,6 +22,8 @@ Liste of users
                 <td>{{ user.fullname }}</td>
                 <td>{{ user.username }}</td>
                 <td>{{ user.roles | join(', ') }}</td>
+
+                <td>{% for show in user.shows %}{{ show.name}} {% if not loop.last %}, {% endif %} {% else %} No shows {% endfor %}</td>
             </tr>
         {% endfor %}
     </tbody>

@@ -4,6 +4,7 @@ namespace AppBundle\Type;
 
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -25,6 +26,24 @@ class UserType extends AbstractType
 
             ])
             ->add('username',EmailType::class,['label'=>'email'])
-            ->add('save', SubmitType::class);
+            ->add('roles',TextType::class ,['label'=>'Roles (separated by commas (,))'])
+            ->add('save', SubmitType::class)
+        ;
+
+        $builder->get('roles')
+            ->addModelTransformer(new CallbackTransformer(
+                function ($rolesAsArray){
+                    if(!empty($rolesAsArray)){
+                        //Form Model to view | array to string
+                        return implode(',',$rolesAsArray);
+                    }
+
+                },
+                function ($rolesAsString){
+                    //Form view to model | string to array
+                    return explode(',', $rolesAsString);
+                }
+            ))
+        ;
     }
 }

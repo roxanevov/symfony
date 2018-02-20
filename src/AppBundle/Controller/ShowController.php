@@ -49,6 +49,7 @@ class ShowController extends Controller
 
         $form->handleRequest($request);
 
+
         if($form->isValid()){
             //dump($show);
             //die;
@@ -56,6 +57,7 @@ class ShowController extends Controller
 
             $show->setMainPicture($generatedFileName);
             $show->setDataSource(Show::DATA_SOURCE_DB);
+            $show->setAuthor($this->getUser());
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($show);

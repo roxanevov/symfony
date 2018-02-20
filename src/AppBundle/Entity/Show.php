@@ -52,7 +52,6 @@ class Show
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="shows")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     * @Assert\NotBlank (groups={"create", "update"})
      */
     private $author;
 
