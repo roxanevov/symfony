@@ -9,6 +9,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Swagger\Annotations as SWG;
 
 /**
  * @Route(name="api_show_")
@@ -18,6 +20,7 @@ class ShowController extends Controller
     /**
      * @Method({"GET"})
      * @Route("/shows", name="list")
+     *
      */
     public function listeAction(SerializerInterface $serializer){
 

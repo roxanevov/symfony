@@ -77,3 +77,7 @@ csa_guzzle:
             config:
                 base_uri: 'http://www.omdbapi.com'
 
+nelmio_api_doc:
+    areas:
+        path_patterns: # an array of regexps
+            - ^/api(?!/doc$)

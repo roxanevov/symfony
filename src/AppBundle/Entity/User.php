@@ -42,18 +42,26 @@ class User implements UserInterface
      * @ORM\Column(type="json_array")
      *
      * @JMS\Expose
-     * @JMS\Groups({"user"})
+     * @JMS\Groups({"user_create"})
+     * @JMS\Type("string")
      */
     private $roles;
 
     /**
      * @ORM\Column
+     *
+     * @Assert\NotBlank
+     *
+     * @JMS\Expose
+     * @JMS\Groups({"user_create"})
      */
     private $password;
 
     /**
      * @ORM\Column
+     *
      * @Assert\Email
+     *
      * @JMS\Expose
      * @JMS\Groups({"user"})
      */

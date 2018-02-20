@@ -10,6 +10,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
+use Symfony\Component\Validator\Constraints as Assert;
 
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -34,6 +35,7 @@ class Category
      *
      * @JMS\Expose
      *
+     * @Assert\NotBlank(message="Please entrer a name")
      */
     private $name;
 
@@ -69,5 +71,8 @@ class Category
         $this->name = $name;
     }
 
+    public function update(Category $category){
+        $this->name = $category->getName();
+    }
 
 }
