@@ -28,6 +28,9 @@ security:
         login:
             pattern: ^/login$
             anonymous: ~
+        api:
+            pattern: ^/api
+            anonymous: ~
 
         secured_area:
             pattern: ^/

@@ -9,11 +9,14 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Entity\ShowRepository")
  * @ORM\Table(name="s_show")
+ *
+ * @JMS\ExclusionPolicy("all")
  */
 class Show
 {
@@ -26,6 +29,8 @@ class Show
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     *
+     * @JMS\Expose
      */
     private $id;
 
@@ -33,12 +38,15 @@ class Show
      * @ORM\Column(type="string")
      * @Assert\NotBlank(message="Please entrer a name", groups={"create"})
      *
+     * @JMS\Expose
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
      * @Assert\NotBlank (groups={"create","update"})
+     *
+     * @JMS\Expose
      */
     private $abstract;
 
@@ -46,18 +54,23 @@ class Show
      * @ORM\Column(type="string")
      *
      * @Assert\NotBlank (groups={"create", "update"})
+     * @JMS\Expose
      */
     private $country;
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="shows")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     *
+     * @JMS\Expose
      */
     private $author;
 
     /**
      * @ORM\Column(type="date")
      * @Assert\NotBlank (groups={"create", "update"})
+     *
+     * @JMS\Expose
      */
     private $releasedDate;
 
@@ -71,6 +84,8 @@ class Show
      * @ORM\ManyToOne(targetEntity="Category")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      * @Assert\NotBlank (groups={"create", "update"})
+     *
+     * @JMS\Expose
      */
     private $category;
 
@@ -78,6 +93,8 @@ class Show
 
     /**
      * @ORM\Column(options = {"default"="In local database"})
+     *
+     * @JMS\Expose
      */
     private $dataSource;
 
