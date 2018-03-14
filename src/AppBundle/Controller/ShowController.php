@@ -51,8 +51,6 @@ class ShowController extends Controller
 
 
         if($form->isValid()){
-            //dump($show);
-            //die;
             $generatedFileName = $fileUploader->upload($show->getTmpPicture(), $show->getCategory()->getName());
 
             $show->setMainPicture($generatedFileName);

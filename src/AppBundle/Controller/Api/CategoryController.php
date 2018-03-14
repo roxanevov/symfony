@@ -3,16 +3,16 @@
 
 namespace AppBundle\Controller\Api;
 
-use AppBundle\Entity\Category;
-use JMS\Serializer\SerializerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use JMS\Serializer\SerializerInterface;
+use AppBundle\Entity\Category;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @Route(name="api_category_")
@@ -29,7 +29,6 @@ class CategoryController extends Controller
 
         $data = $serializer->serialize($category,'json');
         return new Response($data, Response::HTTP_OK,['Content-type'=>'application\json']);
-
 
     }
 
@@ -83,5 +82,18 @@ class CategoryController extends Controller
         return new Response($serializer->serialize($error,'json'), Response::HTTP_BAD_REQUEST,['Content-type'=>'application\json']);
     }
 
+    /**
+     * @Method({"DELETE"})
+     * @Route("/deleteCategory/{id}", name="deleteCategory")
+     */
+    Public function deletShowAction(Category $category){
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($category);
+        $em->flush();
+
+        return new Response('Category delete', Response::HTTP_CREATED,['Content-type'=>'application\json']);
+
+    }
 
 }

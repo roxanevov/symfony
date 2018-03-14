@@ -145,4 +145,11 @@ class User implements UserInterface
     public function getShows(){
         return $this->shows;
     }
+
+    public function update(User $user){
+        $this->fullname = $user->getFullname();
+        $this->roles = $user->getRoles();
+        $this->password = $user->getPassword();
+        $this->email = $user->getUsername();
+    }
 }

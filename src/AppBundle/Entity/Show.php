@@ -22,6 +22,7 @@ class Show
 {
     const DATA_SOURCE_OMBD = 'OMBD';
     const DATA_SOURCE_DB = 'In local database';
+    const DATA_SOURCE_API = 'From api';
 
 
 
@@ -63,7 +64,7 @@ class Show
     private $country;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="shows")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="shows", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      *
      * @JMS\Expose
@@ -83,12 +84,12 @@ class Show
     /**
      * @ORM\Column(type="string")
      * @Assert\Image(minHeight=300, minWidth=750, groups={"create"})
-     * @JMS\Groups({"show"})
+     *
      */
     private $mainPicture;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Category")
+     * @ORM\ManyToOne(targetEntity="Category", cascade={"persist"})
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      * @Assert\NotBlank (groups={"create", "update"})
      *
@@ -275,5 +276,32 @@ class Show
     {
         $this->dataSource = $dataSource;
         return $this;
+    }
+
+    public function parseJson($show, $em){
+
+        if(isset($show['name']) && !empty($show['name'])) {
+            $this->setName($show['name']);
+        }
+        if(isset($show['abstract']) && !empty($show['abstract'])) {
+            $this->setAbstract($show['abstract']);
+        }
+        if(isset($show['category_id']) && !empty($show['category_id'])) {
+            $this->setCategory($em->getRepository('AppBundle:Category')->find($show['category_id']));
+        }
+        if(isset($show['released_date']) && !empty($show['released_date'])) {
+            $this->setReleasedDate(new \DateTime($show['released_date']));
+        }
+        if(isset($show['country']) && !empty($show['country'])) {
+            $this->setCountry($show['country']);
+        }
+        if(isset($show['user_id']) && !empty($show['user_id'])) {
+            $this->setAuthor($em->getRepository('AppBundle:User')->find($show['user_id']));
+        }
+        if(isset($show['main_picture']) && !empty($show['main_picture'])) {
+            $this->setMainPicture($show['main_picture']);
+        }
+
+        $this->setDataSource(Show::DATA_SOURCE_API);
     }
 }

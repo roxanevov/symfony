@@ -3,17 +3,16 @@
 
 namespace AppBundle\Controller\Api;
 
-use AppBundle\Entity\User;
 use JMS\Serializer\DeserializationContext;
 use JMS\Serializer\SerializerInterface;
 use JMS\Serializer\SerializationContext;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-
+use AppBundle\Entity\User;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 /**
  * @Route(name="api_user_")
  */
@@ -70,6 +69,43 @@ class UserController extends Controller
             return new Response('User created', Response::HTTP_CREATED,['Content-type'=>'application\json']);
         }
         return new Response($serializer->serialize($error,'json'), Response::HTTP_BAD_REQUEST,['Content-type'=>'application\json']);
+
+    }
+
+    /**
+     * @Method({"PUT"})
+     * @Route("/user/{id}", name="update")
+     */
+    public function updateAction(Request $request, User $user, SerializerInterface $serializer, ValidatorInterface $validator, EncoderFactoryInterface $encoderFactory){
+        $newUser = $serializer->deserialize($request->getContent(), User::class, 'json');
+        $error = $validator->validate($newUser);
+
+        if($error->count() == 0){
+            $encoder = $encoderFactory->getEncoder($newUser);
+            $password =$encoder->encodePassword($newUser->getPassword(), null);
+
+            $newUser->setPassword($password);
+            $newUser->setRoles(explode(' ,',$newUser->getRoles()));
+
+            $user->update($newUser);
+            $this->getDoctrine()->getManager()->flush();
+
+            return new Response('User update', Response::HTTP_OK,['Content-type'=>'application\json']);
+        }
+        return new Response($serializer->serialize($error,'json'), Response::HTTP_BAD_REQUEST,['Content-type'=>'application\json']);
+    }
+
+    /**
+     * @Method({"DELETE"})
+     * @Route("/deleteUser/{id}", name="deleteUser")
+     */
+    Public function deletShowAction(User $user){
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($user);
+        $em->flush();
+
+        return new Response('User delete', Response::HTTP_CREATED,['Content-type'=>'application\json']);
 
     }
 
