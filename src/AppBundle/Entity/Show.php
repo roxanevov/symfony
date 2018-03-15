@@ -38,7 +38,7 @@ class Show
 
     /**
      * @ORM\Column(type="string")
-     * @Assert\NotBlank(message="Please entrer a name", groups={"create"})
+     * @Assert\NotBlank(message="Please entrer a name", groups={"create", "API"})
      *
      * @JMS\Expose
      * @JMS\Groups({"show"})
@@ -47,7 +47,7 @@ class Show
 
     /**
      * @ORM\Column(type="text")
-     * @Assert\NotBlank (groups={"create","update"})
+     * @Assert\NotBlank (groups={"create","update", "API"})
      *
      * @JMS\Expose
      * @JMS\Groups({"show"})
@@ -57,7 +57,7 @@ class Show
     /**
      * @ORM\Column(type="string")
      *
-     * @Assert\NotBlank (groups={"create", "update"})
+     * @Assert\NotBlank (groups={"create", "update", "API"})
      * @JMS\Expose
      * @JMS\Groups({"show"})
      */
@@ -74,7 +74,7 @@ class Show
 
     /**
      * @ORM\Column(type="date")
-     * @Assert\NotBlank (groups={"create", "update"})
+     * @Assert\NotBlank (groups={"create", "update","API"})
      *
      * @JMS\Expose
      * @JMS\Groups({"show"})
@@ -84,6 +84,7 @@ class Show
     /**
      * @ORM\Column(type="string")
      * @Assert\Image(minHeight=300, minWidth=750, groups={"create"})
+     * @Assert\NotBlank(groups={"API"})
      *
      */
     private $mainPicture;
@@ -91,7 +92,7 @@ class Show
     /**
      * @ORM\ManyToOne(targetEntity="Category", cascade={"persist"})
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
-     * @Assert\NotBlank (groups={"create", "update"})
+     * @Assert\NotBlank (groups={"create", "update", "API"})
      *
      * @JMS\Expose
      * @JMS\Groups({"show"})
