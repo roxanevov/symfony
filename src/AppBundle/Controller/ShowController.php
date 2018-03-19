@@ -27,6 +27,7 @@ class ShowController extends Controller
      */
     public function listAction(Request $request, ShowFinder $showFinder){
 
+
         $session = $request->getSession();
         if($session->has('query_search_shows')){
             $shows = $showFinder->searchByName($session->get('query_search_shows'));

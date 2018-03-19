@@ -22,6 +22,9 @@ class SecurityController extends Controller
      */
     public function loginAction(AuthenticationUtils $authUtils){
 
+        // test overide error
+        //throw new \Exception('test');
+
         return $this->render('security/login.html.twig',[
             'error' => $authUtils->getLastAuthenticationError(),
             'lastUsername'=> $authUtils->getLastUsername()
