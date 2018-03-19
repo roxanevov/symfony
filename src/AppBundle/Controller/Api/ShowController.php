@@ -152,6 +152,29 @@ class ShowController extends Controller
     }
 
     /**
+     *@Method({"POST"})
+     *@Route("/shows", name="create")
+     */
+    public function createShowListenerAction(Request $request, SerializerInterface $serializer, ValidatorInterface $validator){
+
+        $serializationContext = DeserializationContext::create();
+
+        $newShow = $serializer->deserialize($request->getContent(), Show::class, 'json', $serializationContext->setGroups(['create']));
+
+        $error = $validator->validate($newShow, null, ['API']);
+
+        if($error->count() == 0){
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($newShow);
+            $em->flush();
+
+            return new Response('Show created', Response::HTTP_CREATED,['Content-type'=>'application\json']);
+        }
+        return new Response($serializer->serialize($error,'json'), Response::HTTP_BAD_REQUEST,['Content-type'=>'application\json']);
+    }
+
+    /**
      *@Method({"PUT"})
      *@Route("/show/{id}", name="update")
      *
@@ -214,7 +237,6 @@ class ShowController extends Controller
     public function updateShowAction(Request $request, Show $show, SerializerInterface $serializer, ValidatorInterface $validator){
 
         $newShow = json_decode($request->getContent(),1);
-
         $show->parseJson($newShow, $this->getDoctrine()->getManager());
 
         $error = $validator->validate($show, null, ['update']);
