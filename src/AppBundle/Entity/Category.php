@@ -9,11 +9,17 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
+use Symfony\Component\Validator\Constraints as Assert;
+
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity
+ *
  * @UniqueEntity("name", message="{{ value }} is already in database")
+ *
+ * @JMS\ExclusionPolicy("all")
  */
 class Category
 {
@@ -27,6 +33,9 @@ class Category
     /**
      * @ORM\Column(type="string", unique=true)
      *
+     * @JMS\Expose
+     *
+     * @Assert\NotBlank(message="Please entrer a name")
      */
     private $name;
 
@@ -62,5 +71,8 @@ class Category
         $this->name = $name;
     }
 
+    public function update(Category $category){
+        $this->name = $category->getName();
+    }
 
 }

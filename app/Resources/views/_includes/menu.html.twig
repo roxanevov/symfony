@@ -19,6 +19,23 @@
                 <li class="nav-item">
                     <a class="nav-link {% if app.request.attributes.get('_route') == 'category_create' %}active{% endif %}" href="{{ path('category_create') }}">Category create</a>
                 </li>
+                {% if is_granted('ROLE_ADMIN') %}
+                <li class="nav-item">
+                    <a class="nav-link" {% if app.request.attributes.get('_route') == 'user_create' %}active{% endif %}" href="{{ path('user_create') }}">User create</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" {% if app.request.attributes.get('_route') == 'user_list' %}active{% endif %}" href="{{ path('user_list') }}">User list</a>
+                </li>
+                {% endif %}
+                {% if app.user %}
+                <li class="nav-item">
+                    <a class="nav-link" {% if app.request.attributes.get('_route') == 'security_logout' %}active{% endif %}" href="{{ path('security_logout') }}">logout</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" {% if app.request.attributes.get('_route') == 'security_login' %}active{% endif %}" href="{{ path('security_login') }}">login</a>
+                </li>
+                {% endif %}
 
             </ul>
         </div>

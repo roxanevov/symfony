@@ -5,16 +5,19 @@ namespace AppBundle\ShowFinder;
 use AppBundle\Entity\Category;
 use AppBundle\Entity\Show;
 use GuzzleHttp\Client;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Validator\Constraints\DateTime;
 
 class OMDBShowFinder implements ShowFinderInterface
 {
     private $client;
+    private $tokenStorage;
     private $apiKey;
 
-    public function __construct(Client $client, $apiKey)
+    public function __construct(Client $client, TokenStorage $tokenStorage, $apiKey)
     {
         $this->client = $client;
+        $this->tokenStorage = $tokenStorage;
         $this->apiKey = $apiKey;
     }
 
@@ -76,7 +79,7 @@ class OMDBShowFinder implements ShowFinderInterface
                 ->setDataSource(Show::DATA_SOURCE_OMBD)
                 ->setAbstract($json['Plot'])
                 ->setCountry($json['Country'])
-                ->setAuthor($json['Director'])
+                ->setAuthor($this->tokenStorage->getToken())
                 ->setReleasedDate(new \DateTime($json['Released']))
                 ->setMainPicture($json['Poster'])
                 ->setCategory($category);

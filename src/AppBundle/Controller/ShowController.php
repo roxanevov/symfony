@@ -27,6 +27,7 @@ class ShowController extends Controller
      */
     public function listAction(Request $request, ShowFinder $showFinder){
 
+
         $session = $request->getSession();
         if($session->has('query_search_shows')){
             $shows = $showFinder->searchByName($session->get('query_search_shows'));
@@ -49,13 +50,13 @@ class ShowController extends Controller
 
         $form->handleRequest($request);
 
+
         if($form->isValid()){
-            //dump($show);
-            //die;
             $generatedFileName = $fileUploader->upload($show->getTmpPicture(), $show->getCategory()->getName());
 
             $show->setMainPicture($generatedFileName);
             $show->setDataSource(Show::DATA_SOURCE_DB);
+            $show->setAuthor($this->getUser());
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($show);

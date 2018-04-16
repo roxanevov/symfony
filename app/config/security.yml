@@ -2,10 +2,22 @@
 # https://symfony.com/doc/current/security.html
 security:
 
+    encoders:
+        Symfony\Component\Security\Core\User\User: bcrypt
+        AppBundle\Entity\User: bcrypt
+
     # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
         in_memory:
-            memory: ~
+            memory:
+                users:
+                    roxane:
+                        password: '$2y$13$JlsgXSEKHaOS0IRZdNf6l.fGpH1kFxKC5ZxbNPJX52Oy6hHtQ7Zy6'
+                        roles: 'ROLE_USER'
+        database:
+            entity:
+                class: AppBundle\Entity\User
+                property: email
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -13,6 +25,32 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
+        login:
+            pattern: ^/login$
+            anonymous: ~
+        api_doc:
+            pattern: ^/api/doc$
+            anonymous: ~
+        api:
+            pattern: ^/api
+            stateless: true
+            provider: database
+            guard:
+                authenticators:
+                    - AppBundle\Security\Authantication\ApiUserPasswordAuthenticator
+
+
+        secured_area:
+            pattern: ^/
+            provider: database
+            form_login:
+                login_path: /login
+                check_path: /login_check
+                username_parameter: email
+                password-parameter: password
+                default_target_path: /
+                always_use_default_target_path: true
+            logout: ~
         main:
             anonymous: ~
             # activate different ways to authenticate
@@ -22,3 +60,7 @@ security:
 
             # https://symfony.com/doc/current/security/form_login_setup.html
             #form_login: ~
+    #access_control:
+    #  -
+    #   path: ^/user
+    #   roles: ['ROLE_ADMIN']

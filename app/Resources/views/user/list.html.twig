@@ -1,0 +1,32 @@
+{% extends "show/base.html.twig" %}
+
+{% block pageHeading %}
+Liste of users
+{% endblock %}
+
+{% block content%}
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Fullname</th>
+        <th scope="col">Emain</th>
+        <th scope="col">Roles</th>
+        <th scope="col">shows</th>
+    </tr>
+    </thead>
+    <tbody>
+        {% for index,user in users %}
+            <tr>
+                <td>{{ index+1 }}</td>
+                <td>{{ user.fullname }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.roles | join(', ') }}</td>
+
+                <td>{% for show in user.shows %}{{ show.name}} {% if not loop.last %}, {% endif %} {% else %} No shows {% endfor %}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+
+</table>
+{% endblock %}
